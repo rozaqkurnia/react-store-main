@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { RouteComponentProps } from 'react-router-dom'
 import logo from './../logo.svg';
 import './Login.css';
 import AuthService from './../services/AuthService';
 
-class Login extends Component {
+class Login extends Component<RouteComponentProps> {
     state = { username: '', password: '', isChecked: false }
     handleChecked(){
         this.setState({
@@ -18,6 +19,12 @@ class Login extends Component {
         }
         const response = await AuthService.doUserLogin(postData);
         console.log('response', response);
+        if(response) {
+            AuthService.handleLoginSuccess(response, this.state.isChecked);
+            this.props.history.push('/home');
+        } else {
+            alert('Please check your credentials');
+        }
     }
     render() {
         const { username, password, isChecked } = this.state;

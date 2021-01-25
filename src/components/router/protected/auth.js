@@ -1,26 +1,27 @@
 import AuthServices from './../../../services/AuthService';
+import CookieService from './../../../services/CookieService';
 
 class Auth {
     constructor() {
-        const token = localStorage.getItem('accessToken');
+        const token = CookieService.get('access_token');
         (token) ? this.authenticated = true : this.authenticated = false;
     }
 
-    async login(credentials, cb) {
-        const user = await AuthServices.doUserLogin(credentials);
+    // async login(credentials, cb) {
+    //     const user = await AuthServices.doUserLogin(credentials);
 
-        if(!user) {
-            cb(false);
-            return false;
-        }
+    //     if(!user) {
+    //         cb(false);
+    //         return false;
+    //     }
 
-        localStorage.setItem('accessToken', user.access_token);
-        this.authenticated = true;
-        cb(true);
-    }
+    //     localStorage.setItem('accessToken', user.access_token);
+    //     this.authenticated = true;
+    //     cb(true);
+    // }
 
     logout(cb) {
-        localStorage.removeItem('accessToken');
+        CookieService.remove('access_token');
         this.authenticated = false;
         cb();
     }
@@ -30,7 +31,7 @@ class Auth {
     }
 
     getAccessToken() {
-        return localStorage.getItem('accessToken');
+        return CookieService.get('access_token');
     }
 }
 
